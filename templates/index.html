@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Chat — Join</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="join-page">
+
+  <div class="join-card">
+    <div class="join-logo">💬</div>
+    <h1 class="join-title">Local Chat</h1>
+    <p class="join-subtitle">Same WiFi — Real Time Chat</p>
+
+    <form method="POST" action="/" class="join-form">
+      <div class="input-group">
+        <label for="username">তোমার নাম লেখো</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          placeholder="যেমন: Rahim, Karim..."
+          maxlength="20"
+          required
+          autocomplete="off"
+          autofocus
+        >
+      </div>
+      <button type="submit" class="btn-join">
+        Chat Room এ ঢোকো →
+      </button>
+    </form>
+
+    <p class="join-info">
+      🌐 এই device এর IP: <strong id="local-ip">খুঁজছি...</strong>
+    </p>
+  </div>
+
+  <script>
+    // Server এর IP দেখানো
+    fetch('/').then(() => {
+      document.getElementById('local-ip').textContent = window.location.hostname + ':5000';
+    });
+    document.getElementById('local-ip').textContent = window.location.host;
+  </script>
+</body>
+</html>

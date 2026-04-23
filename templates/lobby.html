@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Chat — Room</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="join-page">
+  <div class="lobby-card">
+    <div class="lobby-top">
+      <div class="join-logo">💬</div>
+      <h1 class="join-title">হ্যালো, {{ username }}! 👋</h1>
+      <p class="join-subtitle">Room বানাও অথবা Join করো</p>
+    </div>
+
+    {% if error %}
+      <div class="error-box">⚠️ {{ error }}</div>
+    {% endif %}
+
+    <div class="tab-row">
+      <button class="tab-btn active" id="tab-create" onclick="switchTab('create')">➕ নতুন Room বানাও</button>
+      <button class="tab-btn" id="tab-join" onclick="switchTab('join')">🔑 Room এ Join করো</button>
+    </div>
+
+    <div id="panel-create" class="tab-panel">
+      <form method="POST" action="/lobby">
+        <input type="hidden" name="action" value="create">
+        <div class="input-group">
+          <label>Room এর নাম</label>
+          <input type="text" name="room_name" placeholder="যেমন: আমাদের-চ্যাট" maxlength="30" required autocomplete="off">
+        </div>
+        <div class="input-group">
+          <label>Password সেট করো</label>
+          <div class="pass-wrap">
+            <input type="password" name="password" id="cp" placeholder="শুধু তোমার বন্ধু জানবে" maxlength="50" required>
+            <button type="button" class="eye-btn" onclick="togglePass('cp', this)">👁</button>
+          </div>
+          <small class="hint">এই password তোমার বন্ধুকে দাও — সে Join করতে পারবে</small>
+        </div>
+        <button type="submit" class="btn-join">Room তৈরি করো →</button>
+      </form>
+    </div>
+
+    <div id="panel-join" class="tab-panel hidden">
+      <form method="POST" action="/lobby">
+        <input type="hidden" name="action" value="join">
+        <div class="input-group">
+          <label>Room এর নাম</label>
+          <input type="text" name="room_name" placeholder="বন্ধু যে নাম দিয়েছে" maxlength="30" required autocomplete="off">
+        </div>
+        <div class="input-group">
+          <label>Password</label>
+          <div class="pass-wrap">
+            <input type="password" name="password" id="jp" placeholder="Room এর password" maxlength="50" required>
+            <button type="button" class="eye-btn" onclick="togglePass('jp', this)">👁</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-join btn-join-alt">Room এ ঢোকো →</button>
+      </form>
+    </div>
+
+    <a href="/logout" class="back-link">← নাম বদলাও</a>
+  </div>
+
+  <script>
+    function switchTab(tab) {
+      document.getElementById('panel-create').classList.toggle('hidden', tab !== 'create');
+      document.getElementById('panel-join').classList.toggle('hidden', tab !== 'join');
+      document.getElementById('tab-create').classList.toggle('active', tab === 'create');
+      document.getElementById('tab-join').classList.toggle('active', tab === 'join');
+    }
+    function togglePass(id, btn) {
+      const input = document.getElementById(id);
+      input.type = input.type === 'password' ? 'text' : 'password';
+      btn.textContent = input.type === 'password' ? '👁' : '🙈';
+    }
+  </script>
+</body>
+</html>

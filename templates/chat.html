@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💬 #{{ room }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="chat-page">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <span class="logo">💬</span>
+      <div>
+        <div class="app-name">Local Chat</div>
+        <div class="wifi-tag">🟢 WiFi Connected</div>
+      </div>
+    </div>
+
+    <div class="room-badge">🔒 <strong>#{{ room }}</strong></div>
+
+    <div class="user-card">
+      <div class="avatar">{{ username[0].upper() }}</div>
+      <div>
+        <div class="user-name">{{ username }}</div>
+        <div class="user-status">Online</div>
+      </div>
+    </div>
+
+    <div class="online-box">
+      <div class="online-label">Online Users</div>
+      <div class="online-count" id="online-count">1</div>
+    </div>
+
+    <a href="/logout" class="btn-logout">🚪 বের হও</a>
+  </aside>
+
+  <main class="chat-main">
+    <header class="chat-header">
+      <div class="room-info">
+        <span class="room-dot"></span>
+        <span class="room-name"># {{ room }}</span>
+      </div>
+      <div class="typing-indicator" id="typing-indicator"></div>
+    </header>
+
+    <div class="messages-area" id="messages-area">
+      <div class="system-msg">🔒 তুমি <strong>#{{ room }}</strong> Room এ আছো</div>
+      {% for msg in messages %}
+        {% if msg.username == username %}
+          <div class="msg msg-self">
+            <div class="msg-bubble msg-bubble-self">
+              <p class="msg-text">{{ msg.message }}</p>
+              <span class="msg-time">{{ msg.timestamp }}</span>
+            </div>
+          </div>
+        {% else %}
+          <div class="msg msg-other">
+            <div class="msg-avatar">{{ msg.username[0].upper() }}</div>
+            <div>
+              <div class="msg-sender">{{ msg.username }}</div>
+              <div class="msg-bubble msg-bubble-other">
+                <p class="msg-text">{{ msg.message }}</p>
+                <span class="msg-time">{{ msg.timestamp }}</span>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="input-area">
+      <input type="text" id="msg-input" placeholder="Message লেখো... (Enter চাপো)" maxlength="500" autocomplete="off">
+      <button id="send-btn" class="btn-send">Send ➤</button>
+    </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.0/socket.io.min.js"></script>
+  <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+  <script>
+    const CURRENT_USER = "{{ username }}";
+    const CURRENT_ROOM = "{{ room }}";
+  </script>
+</body>
+</html>
